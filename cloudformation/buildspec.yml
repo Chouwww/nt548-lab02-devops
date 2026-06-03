@@ -5,25 +5,34 @@ phases:
     runtime-versions:
       python: 3.11
     commands:
-      - echo "Installing cfn-lint and taskcat"
-      - pip install --upgrade pip
-      - pip install cfn-lint taskcat
+      - echo "Installing cfn-lint"
+      - python -m pip install --upgrade pip setuptools wheel
+      - python -m pip install --no-cache-dir "cfn-lint==1.48.1"
+
+      - echo "Installing taskcat in a separate virtual environment"
+      - python -m venv /tmp/taskcat-venv
+      - /tmp/taskcat-venv/bin/pip install --upgrade pip setuptools wheel
+      - /tmp/taskcat-venv/bin/pip install --no-cache-dir "taskcat==0.9.57"
 
   pre_build:
     commands:
       - echo "Running cfn-lint"
+      - cfn-lint --version
       - cfn-lint --non-zero-exit-code error cloudformation/network-ec2.yaml
 
   build:
     commands:
       - echo "Checking Taskcat version"
-      - taskcat --version
+      - /tmp/taskcat-venv/bin/taskcat --version
+
       - echo "Showing Taskcat configuration"
       - cat cloudformation/.taskcat.yml
+
       - echo "Running Taskcat lint"
       - cd cloudformation
-      - taskcat lint || true
+      - /tmp/taskcat-venv/bin/taskcat lint || true
       - cd ..
+
       - echo "Taskcat was executed. Continuing pipeline for lab deployment."
       - echo "CloudFormation validation completed successfully"
 
