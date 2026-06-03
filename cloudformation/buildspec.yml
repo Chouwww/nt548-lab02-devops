@@ -1,0 +1,29 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo "Installing cfn-lint and taskcat"
+      - pip install --upgrade pip
+      - pip install cfn-lint taskcat
+
+  pre_build:
+    commands:
+      - echo "Running cfn-lint"
+      - cfn-lint cloudformation/network-ec2.yaml
+
+  build:
+    commands:
+      - echo "Running Taskcat lint"
+      - cd cloudformation
+      - taskcat lint
+      - cd ..
+      - echo "CloudFormation validation completed successfully"
+
+artifacts:
+  files:
+    - cloudformation/network-ec2.yaml
+    - cloudformation/buildspec.yml
+    - cloudformation/.taskcat.yml

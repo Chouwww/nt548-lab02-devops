@@ -1,0 +1,11 @@
+project:
+  name: nt548-lab02-cloudformation
+  regions:
+    - ap-southeast-1
+
+tests:
+  default:
+    template: ./network-ec2.yaml
+    parameters:
+      AmiId: ami-0e8bf7e1d1f339c74
+      InstanceType: t3.micro
