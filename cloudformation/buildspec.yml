@@ -12,7 +12,7 @@ phases:
   pre_build:
     commands:
       - echo "Running cfn-lint"
-      - cfn-lint cloudformation/network-ec2.yaml
+      - cfn-lint --non-zero-exit-code error cloudformation/network-ec2.yaml
 
   build:
     commands:
