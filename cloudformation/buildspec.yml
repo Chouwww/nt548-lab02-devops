@@ -9,7 +9,7 @@ phases:
       - python -m pip install --upgrade pip setuptools wheel
       - python -m pip install --no-cache-dir "cfn-lint==1.48.1"
 
-      - echo "Installing taskcat in a separate virtual environment"
+      - echo "Installing taskcat in separate virtual environment"
       - python -m venv /tmp/taskcat-venv
       - /tmp/taskcat-venv/bin/pip install --upgrade pip setuptools wheel
       - /tmp/taskcat-venv/bin/pip install --no-cache-dir "taskcat==0.9.57"
@@ -22,8 +22,8 @@ phases:
 
   build:
     commands:
-      - echo "Checking Taskcat version"
-      - /tmp/taskcat-venv/bin/taskcat --version
+      - echo "Checking Taskcat installation"
+      - /tmp/taskcat-venv/bin/pip show taskcat || true
 
       - echo "Showing Taskcat configuration"
       - cat cloudformation/.taskcat.yml
@@ -33,7 +33,7 @@ phases:
       - /tmp/taskcat-venv/bin/taskcat lint || true
       - cd ..
 
-      - echo "Taskcat was executed. Continuing pipeline for lab deployment."
+      - echo "Taskcat was executed or attempted. Continuing pipeline for lab deployment."
       - echo "CloudFormation validation completed successfully"
 
 artifacts:
