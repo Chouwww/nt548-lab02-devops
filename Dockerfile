@@ -1,0 +1,7 @@
+FROM nginx:alpine
+
+RUN echo "<h1>NT548 - LAB02 - DEVOPS</h1><p>Hoan thanh Noi dung 3!</p>" > /usr/share/nginx/html/index.html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
