@@ -72,8 +72,8 @@ pipeline {
                 withKubeConfig([credentialsId: K8S_CREDENTIAL_ID]) {
                     sh 'curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && chmod +x kubectl'
                     sh "./kubectl set image -f k8s/deployment.yaml microservice=${DOCKER_IMAGE}:${IMAGE_TAG} --local -o yaml > k8s/deploy-ready.yaml"
-                    sh "./kubectl apply -f k8s/deploy-ready.yaml"
-                    sh "./kubectl apply -f k8s/service.yaml"
+                    sh "./kubectl apply -f k8s/deploy-ready.yaml --insecure-skip-tls-verify"
+                    sh "./kubectl apply -f k8s/service.yaml --insecure-skip-tls-verify"
                 }
             }
         }
