@@ -29,7 +29,9 @@ Dự án này là bài thực hành Lab 02, tập trung vào việc tự động
 
 ### 1. Cài đặt và Chạy mã nguồn
 
-**Môi trường:** Thực hiện trên AWS CloudShell.
+**Môi trường:**
+
+- Thực hiện trên AWS CloudShell.
 
 1. Clone repository về môi trường CloudShell:
    ```bash
@@ -46,9 +48,13 @@ Dự án này là bài thực hành Lab 02, tập trung vào việc tự động
 
 ### 2. Kiểm tra kết quả
 
-**Hạ tầng:** Sau khi chạy thành công, Terraform sẽ trả về các Output bao gồm vpc_id, public_subnet_id, private_subnet_id, nat_gateway_id và ec2_public_ip.
-**Ứng dụng Web:** Truy cập trình duyệt hoặc dùng lệnh curl http://<ec2_public_ip>. Hệ thống sẽ trả về trang web với nội dung "NT548 Lab02 - Terraform EC2".
-**CI/CD:** Truy cập tab Actions trên GitHub Repo. Sẽ thấy luồng "Terraform CI with Checkov" tự động chạy và quét bảo mật mã nguồn Terraform mỗi khi có commit mới.
+**Hạ tầng:**
+
+- Sau khi chạy thành công, Terraform sẽ trả về các Output bao gồm vpc_id, public_subnet_id, private_subnet_id, nat_gateway_id và ec2_public_ip.
+  **Ứng dụng Web:**
+- Truy cập trình duyệt hoặc dùng lệnh curl http://<ec2_public_ip>. Hệ thống sẽ trả về trang web với nội dung "NT548 Lab02 - Terraform EC2".
+  **CI/CD:**
+- Truy cập tab Actions trên GitHub Repo. Sẽ thấy luồng "Terraform CI with Checkov" tự động chạy và quét bảo mật mã nguồn Terraform mỗi khi có commit mới.
 
 ---
 
@@ -63,9 +69,10 @@ Dự án này là bài thực hành Lab 02, tập trung vào việc tự động
    git push codecommit main
    ```
 3. Pipeline được cấu hình với tên nt548-lab02-cfn-pipeline gồm 3 stage:
-   Source: Trỏ đến CodeCommit repository
-   Build: Trỏ đến CodeBuild project nt548-lab02-cfn-build (sử dụng file cloudformation/buildspec.yml để chạy cfn-lint và taskcat trên môi trường Python ảo).
-   Deploy: Sử dụng CloudFormation để tạo hoặc cập nhật stack nt548-lab02-cfn-pipeline-stack.
+
+- Source: Trỏ đến CodeCommit repository
+- Build: Trỏ đến CodeBuild project nt548-lab02-cfn-build (sử dụng file cloudformation/buildspec.yml để chạy cfn-lint và taskcat trên môi trường Python ảo).
+- Deploy: Sử dụng CloudFormation để tạo hoặc cập nhật stack nt548-lab02-cfn-pipeline-stack.
 
 ### 2. Kiểm tra kết quả
 
@@ -78,7 +85,9 @@ Dự án này là bài thực hành Lab 02, tập trung vào việc tự động
 
 ### 1. Cài đặt môi trường máy chủ
 
-**Môi trường:** Khởi tạo một máy ảo EC2 mới trên AWS (sử dụng hệ điều hành Ubuntu 24.04 LTS, cấu hình m7i-flex.large hoặc có thể là loại khác miễn sao đủ RAM để chạy Jenkins và SonarQube)
+**Môi trường:**
+
+- Khởi tạo một máy ảo EC2 mới trên AWS (sử dụng hệ điều hành Ubuntu 24.04 LTS, cấu hình m7i-flex.large hoặc có thể là loại khác miễn sao đủ RAM để chạy Jenkins và SonarQube)
 
 1. SSH vào máy ảo và thực thi các lệnh sau::
 
@@ -100,26 +109,29 @@ Dự án này là bài thực hành Lab 02, tập trung vào việc tự động
    ```bash
    docker-compose up -d
    ```
-   Cấu hình SonarQube (http://<EC2_IP>:9000):
-   Tạo dự án với Project key nt548-microservice.  
-    Tạo Token bảo mật nt548-jenkins-ci-token
-   Cấu hình Jenkins (http://<EC2_IP>:8080):
-   Tải file k3s-config.yaml.txt về, chỉnh sửa để kết nối cụm K3s.
-   Thêm các credentials: sonar-token (Secret text), dockerhub-creds (Username with password), k8s-kubeconfig (Secret file).
-   Cấu hình SonarQube Server trong hệ thống Jenkins.
-   Tạo Pipeline:
-   Tạo Item loại Pipeline, cấu hình Pipeline script from SCM trỏ về GitHub.
-   Bật GitHub hook trigger for GITScm polling và thêm Webhook http://<EC2_IP>:8080/github-webhook/ trên GitHub.
+
+- Cấu hình SonarQube (http://<EC2_IP>:9000):
+- Tạo dự án với Project key nt548-microservice.
+- Tạo Token bảo mật nt548-jenkins-ci-token
+- Cấu hình Jenkins (http://<EC2_IP>:8080):
+- Tải file k3s-config.yaml.txt về, chỉnh sửa để kết nối cụm K3s.
+- Thêm các credentials: sonar-token (Secret text), dockerhub-creds (Username with password), k8s-kubeconfig (Secret file).
+- Cấu hình SonarQube Server trong hệ thống Jenkins.
+- Tạo Pipeline:
+- Tạo Item loại Pipeline, cấu hình Pipeline script from SCM trỏ về GitHub.
+- Bật GitHub hook trigger for GITScm polling và thêm Webhook http://<EC2_IP>:8080/github-webhook/ trên GitHub.
 
 ### 2. Kiểm tra kết quả
 
 **Kích hoạt tự động:**
-Khi có commit mã nguồn đẩy lên GitHub, Webhook sẽ tự động kích hoạt Jenkins Pipeline.
-**Luồng thực thi (theo Jenkinsfile):**
-Checkout Code: Tải mã nguồn.
-SonarQube Analysis: Quét chất lượng mã nguồn (Trạng thái: Passed).
-Build Docker Image: Đóng gói ứng dụng.
-Trivy Security Scan: Quét bảo mật Image mức HIGH và CRITICAL.
-Push to Docker Hub: Đẩy Image lên registry.
-Deploy to Kubernetes: Cập nhật tag mới và dùng kubectl apply lên K3s (kèm --insecure-skip-tls-verify).
-**Thành quả:** Sau khi Pipeline báo Finished: SUCCESS, truy cập trình duyệt tại http://<EC2_Public_IP>:30080 để thấy ứng dụng web hiển thị "Hoan thanh Noi dung bai lab02!".
+
+- Khi có commit mã nguồn đẩy lên GitHub, Webhook sẽ tự động kích hoạt Jenkins Pipeline.
+  **Luồng thực thi (theo Jenkinsfile):**
+- Checkout Code: Tải mã nguồn.
+- SonarQube Analysis: Quét chất lượng mã nguồn (Trạng thái: Passed).
+- Build Docker Image: Đóng gói ứng dụng.
+- Trivy Security Scan: Quét bảo mật Image mức HIGH và CRITICAL.
+- Push to Docker Hub: Đẩy Image lên registry.
+- Deploy to Kubernetes: Cập nhật tag mới và dùng kubectl apply lên K3s (kèm --insecure-skip-tls-verify).
+  **Thành quả:**
+- Sau khi Pipeline báo Finished: SUCCESS, truy cập trình duyệt tại http://<EC2_Public_IP>:30080 để thấy ứng dụng web hiển thị "Hoan thanh Noi dung bai lab02!".
