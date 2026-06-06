@@ -27,7 +27,8 @@ pipeline {
                         -e SONAR_HOST_URL="http://172.31.41.248:9000" \
                         sonarsource/sonar-scanner-cli \
                         -Dsonar.projectKey=nt548-microservice \
-                        -Dsonar.sources=.
+                        -Dsonar.sources=. \
+                        -Dsonar.token=$SONAR_TOKEN
                     '''
                     }
                 }
