@@ -20,6 +20,7 @@ pipeline {
             steps {
                 echo 'Kiểm tra chất lượng mã nguồn...'
                 withSonarQubeEnv(SONAR_SERVER) {
+                    withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
                     sh '''
                     docker run --rm \
                         -v "$(pwd):/usr/src" \
@@ -28,6 +29,7 @@ pipeline {
                         -Dsonar.projectKey=nt548-microservice \
                         -Dsonar.sources=.
                     '''
+                    }
                 }
             }
         }
