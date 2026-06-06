@@ -23,7 +23,7 @@ pipeline {
                     sh '''
                     docker run --rm \
                         -v "$(pwd):/usr/src" \
-                        -e SONAR_HOST_URL="http://172.31.45.51:9000" \
+                        -e SONAR_HOST_URL="http://172.31.41.248:9000" \
                         sonarsource/sonar-scanner-cli \
                         -Dsonar.projectKey=nt548-microservice \
                         -Dsonar.sources=.
